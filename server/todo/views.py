@@ -13,7 +13,7 @@ class TodoDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
-class AddTask(APIView):
+class AddTaskView(APIView):
     def post(self, request):
         task = TodoSerializer(request.data)
         if task.is_valid():
