@@ -1,6 +1,9 @@
 # todoapp
 
-## Project setup
+## Project setup for Front-end
+
+#Tools: node.js, yarn
+
 ```
 yarn install
 ```
@@ -22,3 +25,6 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## Project setup for Back-end
