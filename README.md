@@ -2,7 +2,7 @@
 
 ## Project setup for Front-end
 
-##Tools: node.js, yarn
+## Tools: node.js, yarn
 
 ```
 yarn install
