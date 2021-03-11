@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
 /dist
-server/todo_project/__pychache__/
-server/todo/__pychache__/
+/server/todo_project/__pychache__/
+/server/todo/__pychache__/
 
 
 # local env files
