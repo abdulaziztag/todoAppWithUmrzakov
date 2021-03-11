@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+server/todo_project/__pycache__/
 
 
 # local env files

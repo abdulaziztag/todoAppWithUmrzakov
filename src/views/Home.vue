@@ -80,10 +80,12 @@ export default {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/v1/post', {
           method: 'POST', // или 'PUT'
-          body: JSON.stringify(this.form.name), // данные могут быть 'строкой' или {объектом}!
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({
+            title: this.form.name
+          }) // данные могут быть 'строкой' или {объектом}!
         });
         const json = await response.json();
         console.log('Успех:', JSON.stringify(json));
