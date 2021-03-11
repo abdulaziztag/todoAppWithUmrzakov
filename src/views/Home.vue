@@ -1,18 +1,130 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <el-container>
+      <el-header>
+        Todo app
+      </el-header>
+      <el-form
+          ref="form"
+          :inline="true"
+          :model="form"
+          label-width="80px"
+          label-position="left"
+          style="margin-left: 20px;margin-top: 30px;"
+      >
+        <el-form-item label="Add task">
+          <el-input v-model="form.name" placeholder="Task title"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="addTask">Add</el-button>
+        </el-form-item>
+      </el-form>
+      <p>Tasks</p>
+      <el-card
+          v-for="todo in todos"
+          :key="todo.index"
+      >
+        {{ todo.title }}
+        <div
+            style="float: right; height: 10px; width: 10px; border-radius: 100%"
+            @click="changeTask(todo.id)"
+            :class="[{'green-dot': todo.done}, {'red-dot': !todo.done}]"
+        ></div>
+        <i
+            class="el-icon-delete"
+            @click="dialogVisibleHandle(todo.title ,todo.id)"
+            style="float: right; margin-right: 10px;"
+        ></i>
+        <el-dialog
+            title="Tips"
+            :visible.sync="dialogVisible"
+            width="80%">
+          <span>Are you sure to delete item {{ itemWillDelete }}</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="deleteItem">Confirm</el-button>
+          </span>
+        </el-dialog>
+      </el-card>
+    </el-container>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
+  data: () => ({
+    todos: [],
+    dialogVisible: false,
+    deleteId: null,
+    itemWillDelete: null,
+    form: {
+      name: ''
+    }
+  }),
+  methods: {
+    changeTask(id) {
+      console.log(id)
+    },
+    dialogVisibleHandle(name ,id) {
+      this.deleteId = id
+      this.itemWillDelete = name
+      this.dialogVisible = true
+    },
+    deleteItem() {
+      console.log(this.deleteId)
+      this.dialogVisible = false
+    },
+    async addTask() {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/post', {
+          method: 'POST', // или 'PUT'
+          body: JSON.stringify(this.form.name), // данные могут быть 'строкой' или {объектом}!
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const json = await response.json();
+        console.log('Успех:', JSON.stringify(json));
+      } catch (error) {
+        console.error('Ошибка:', error);
+      }
+    }
+  },
+  created() {
+    fetch('http://127.0.0.1:8000/api/v1/get_all/')
+        .then(response => response.json())
+        .then(json => this.todos = json)
   }
 }
 </script>
+
+<style scoped>
+.el-header {
+  font-family: Calibri, serif;
+  font-size: 32px;
+  box-shadow: 1px 1px 10px 1px #bab8b8;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.el-card {
+  margin: 5px;
+}
+
+p {
+  font-size: 30px;
+  margin: 10px;
+  font-family: Calibri, serif;
+}
+
+.green-dot {
+  background: #0dcb0d;
+}
+
+.red-dot {
+  background: red;
+}
+</style>
