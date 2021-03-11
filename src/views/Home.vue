@@ -68,8 +68,28 @@ export default {
     }
   }),
   methods: {
-    changeTask(id) {
-      console.log(id)
+    async changeTask(id) {
+      try {
+        this.loading = true
+        let idx = this.todos.findIndex((key) => {
+          return key.id === id
+        })
+        await fetch(`http://127.0.0.1:8000/api/v1/${id}/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            done: !this.todos[idx].done
+          })
+        })
+
+        this.todos[idx].done = !this.todos[idx].done
+      } catch (error) {
+        console.error('Ошибка:', error);
+      }
+      this.dialogVisible = false
+      this.loading = false
     },
     dialogVisibleHandle(name ,id) {
       this.deleteId = id
@@ -95,7 +115,7 @@ export default {
     async addTask() {
       try {
         this.loading = true
-        const response = await fetch('http://127.0.0.1:8000/api/v1/post/', {
+        const response = await fetch('http://127.0.0.1:8000/api/v1/add/', {
           method: 'POST', // или 'PUT'
           headers: {
             'Content-Type': 'application/json'
@@ -116,7 +136,7 @@ export default {
   },
   created() {
     this.loading = true
-    fetch('http://127.0.0.1:8000/api/v1/get_all/')
+    fetch('http://127.0.0.1:8000/api/v1/all/')
         .then(response => response.json())
         .then(json => {
           this.todos = json
