@@ -3,7 +3,7 @@ from rest_framework import generics, permissions
 from rest_framework.views import APIView
 
 from .models import Todo
-from .serializers import TodoSerializer
+from .serializers import TodoSerializer, PostTodoSerializer
 
 class TodoListView(generics.ListCreateAPIView):
     queryset = Todo.objects.all()
@@ -15,7 +15,7 @@ class TodoDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class AddTaskView(APIView):
     def post(self, request):
-        task = TodoSerializer(request.data)
+        task = PostTodoSerializer(request.data)
         if task.is_valid():
             task.save()
         return Response(status=201)
